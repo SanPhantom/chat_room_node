@@ -11,9 +11,10 @@ class WSRouter {
 
     exec() {
         expressWs(app, this.server);
-        router.ws('/', function(ws, req) {
+        router.ws('/:userid', function(ws, req) {
+
             ws.send('请求连接……')
-            ws.send('You have connected successfully');
+            ws.send('该好友已上线，有事说事，没事请远离' + req.params.userid);
             ws.on('message', function(msg) {
                 console.log(msg);
                 ws.send(msg)

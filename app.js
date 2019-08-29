@@ -4,7 +4,10 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var expressWs = require('express-ws');
-var http = require('http');
+var bodyParser = require('body-parser');
+var multiparty = require('connect-multiparty');
+var multer = require('multer'); // v1.0.5
+var upload = multer(); // for parsing multipart/form-data
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -21,6 +24,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser());
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
@@ -28,25 +34,13 @@ app.use('/users', usersRouter);
 //webSocket 实例
 // new WSRouter(app, http.createServer(app));
 
-app.get('/a', function(req, res, next) {
-    console.log('get route', req.testing);
-
+app.post('/login', upload.array(), function(req, res) {
+    console.log(req.body);
+    res.send(req.body);
+}).get('/login', function(req, res) {
+    console.log(req.query);
+    res.send(req.query);
 })
-
-app.ws('/a', function(ws, req) {
-    console.log(ws);
-    ws.on('message', function(msg) {
-        console.log(msg);
-    });
-    console.log('socket', req.testing);
-    ws.on("close", function(err, reason) {
-        console.log(err);
-    });
-    ws.on("error", function(err, reason) {
-        console.log(err);
-    });
-});
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
