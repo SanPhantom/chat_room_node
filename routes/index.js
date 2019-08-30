@@ -7,12 +7,16 @@ router.get('/', function(req, res, next) {
     res.render('index', { title: 'Express' });
 });
 
-// router.post('/login', function(req, res) {
-//     console.log(req);
-//     res.send(req.body);
-// }).get('/login', function(req, res) {
-//     console.log(req.query);
-//     res.send(req.query);
-// })
+router.post('/login', function(req, res) {
+    console.log(req.body.phone);
+    res.send(req.body);
+}).get('/login', function(req, res) {
+    console.log(req.query);
+    res.send(req.query);
+})
+
+router.post('/register', function(req, res) {
+
+})
 
 module.exports = router;
