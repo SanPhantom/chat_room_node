@@ -8,7 +8,18 @@ socket.on('send', function(data) {
 
 
 function a() {
-    socket.emit('getter', 'nihao');
+    socket.emit('join', {
+        id: '123456',
+        name: 'nihao',
+        phone: '15972167940'
+    });
+
+    socket.emit('sendToOne', {
+        to: '123478',
+        msg: '你好， 你是谁',
+        from: '123456',
+        type: 'private'
+    });
 }
 
 var option = {
