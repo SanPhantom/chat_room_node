@@ -8,7 +8,7 @@ var app = require('../app');
 var debug = require('debug')('nodejs:server');
 var http = require('http');
 // var WSRouter = require('../routes/socket');
-var ChatRoom = require('../routes/chatroom')
+var io = require('../routes/chatroom')
 
 
 
@@ -24,15 +24,16 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+server.listen(port);
 
 // new WSRouter(server);
-ChatRoom.listen(server);
+io.getSocketIO(server);
 
 /**
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
+
 server.on('error', onError);
 server.on('listening', onListening);
 

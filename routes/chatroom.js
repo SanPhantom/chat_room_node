@@ -1,34 +1,22 @@
-var express = require('express');
-var socketio = require('socket.io');
-var io;
-var guest_num = 0;
+var socketio = {};
+var socket_io = require('socket.io');
 
-exports.listen = function(server) {
-    io = socketio(server, {
+socketio.getSocketIO = function(server) {
+    var io = socket_io.listen(server, {
         path: '/chat'
     });
 
-    io.on('connection', function(socket) {
-        var addedUser = false;
+    io.sockets.on('connection', function(socket) {
 
-        socket.on('join', function(username) {
-            if (addedUser) return;
-
-            socket.username = username;
-            ++guest_num;
-            addedUser = true;
-
-            socket.emit('login', {
-                username: socket.username,
-                num_user: guest_num
-            })
-
-            socket.broadcast.emit('join', {
-                username: socket.username,
-                msg: "欢迎 " + socket.username + " 进入聊天室",
-                type: "BROADCAST",
-                numUsers: guest_num
-            })
+        socket.emit('send', '连接中……');
+        console.log('连接成功');
+        socket.on('getter', function(msg) {
+            console.log('监听点击事件' + msg);
+            var datas = [1, 2, 3, 4, 5];
+            socket.emit('send', { datas: datas });
+            socket.broadcast.emit('send', { datas: datas });
         })
     })
 }
+
+module.exports = socketio;
