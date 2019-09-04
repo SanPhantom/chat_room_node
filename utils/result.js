@@ -3,7 +3,7 @@ module.exports = {
         return {
             code,
             data,
-            cookie
+            token
         }
     }
 }
