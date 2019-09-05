@@ -53,7 +53,6 @@ app.use(function(req, res, next) {
 
 //跨域解决方式
 app.use(function(req, res, next) {
-    console.log(req.headers.origin);
     res.header("Access-Control-Allow-Credentials", "true");
     res.header("Access-Control-Allow-Origin", req.headers.origin); //允许的来源
     res.header("Access-Control-Allow-Headers", "Content-Type, Token"); //请求的头部
