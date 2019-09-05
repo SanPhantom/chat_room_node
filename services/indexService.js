@@ -2,7 +2,7 @@ var db = require('../utils/mysql')
 
 let phoneLogin = (phone, password) => {
     return new Promise((resolve, reject) => {
-        console.log(password);
+        // console.log(password);
         let sql = 'select * from user where phone = ' + phone + " and password = " + password;
         db.query(sql, function(err, rows) {
             if (err) {

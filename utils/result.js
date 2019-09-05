@@ -1,5 +1,5 @@
 module.exports = {
-    format: (code, data, cookie) => {
+    format: (code, data, token) => {
         return {
             code,
             data,

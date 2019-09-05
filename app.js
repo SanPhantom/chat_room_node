@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 // var multiparty = require('connect-multiparty');
 var multer = require('multer'); // v1.0.5
 // var upload = multer(); // for parsing multipart/form-data
+var TokenJWT = require('./utils/token')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -33,6 +34,34 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 // app.use(bodyParser());
 
+//api接口token检验
+app.use(function(req, res, next) {
+    if (req.url !== '/login' && req.url !== '/register') {
+        let token = req.header.token;
+        let jwt = new TokenJWT(token);
+        let result = jwt.verifyToken();
+
+        if (result === 'error') {
+            res.send({ code: 400, msg: '登录已过期，请重新登录' });
+        } else {
+            next();
+        }
+    } else {
+        next();
+    }
+})
+
+//跨域解决方式
+app.use(function(req, res, next) {
+    console.log(req.headers.origin);
+    res.header("Access-Control-Allow-Credentials", "true");
+    res.header("Access-Control-Allow-Origin", req.headers.origin); //允许的来源
+    res.header("Access-Control-Allow-Headers", "Content-Type, Token"); //请求的头部
+    res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS"); //允许请求的方法
+    res.header("Content-Type", "application/json;charset=utf-8");
+    next();
+})
+
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
@@ -54,5 +83,7 @@ app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error');
 });
+
+
 
 module.exports = app;
