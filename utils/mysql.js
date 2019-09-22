@@ -5,7 +5,7 @@ let pool = mysql.createPool({
     user: 'ttc',
     password: 'ttc0223',
     // socketPath: '/var/run/mysqld/mysqld.sock',
-    database: 'integralShop',
+    database: 'chat',
     port: '3306'
 })
 
