@@ -6,6 +6,7 @@ module.exports = class User {
         this.email = null;
         this.avatar = null;
         this.cid = null;
+        this.password = null;
     }
 
     init(user) {
@@ -15,17 +16,19 @@ module.exports = class User {
         this.email = user.email || '';
         this.avatar = user.avatar || '';
         this.cid = user.cid || '';
+        this.password = user.password || '';
     }
 
-    toString() {
+    tojson() {
         return {
             id: this.id,
             nickname: this.nickname,
             phone: this.phone,
             email: this.email,
             avatar: this.avatar,
-            cid: this.cid
+            cid: this.cid,
+            passoword: this.password
         }
     }
 
-} 
+}

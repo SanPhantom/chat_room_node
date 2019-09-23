@@ -18,7 +18,7 @@ expressWs(app);
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(multer().array());
+// app.use(multer().array());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -35,21 +35,21 @@ app.use(express.static(path.join(__dirname, 'public')));
 // app.use(bodyParser());
 
 //api接口token检验
-app.use(function(req, res, next) {
-    if (req.url !== '/login' && req.url !== '/register') {
-        let token = req.header.token;
-        let jwt = new TokenJWT(token);
-        let result = jwt.verifyToken();
+// app.use(function(req, res, next) {
+//     if (req.url !== '/login' && req.url !== '/register') {
+//         let token = req.header.token;
+//         let jwt = new TokenJWT(token);
+//         let result = jwt.verifyToken();
 
-        if (result === 'error') {
-            res.send({ code: 400, msg: '登录已过期，请重新登录' });
-        } else {
-            next();
-        }
-    } else {
-        next();
-    }
-})
+//         if (result === 'error') {
+//             res.send({ code: 400, msg: '登录已过期，请重新登录' });
+//         } else {
+//             next();
+//         }
+//     } else {
+//         next();
+//     }
+// })
 
 //跨域解决方式
 app.use(function(req, res, next) {

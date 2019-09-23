@@ -23,6 +23,30 @@ let phoneLogin = (phone, password) => {
     })
 }
 
+let register = (user) => {
+    user.cid = "123";
+
+    let sql_insert = 'insert into c_user(id, nickname, phone, password, email, cid, avatar) values (?, ?, ?, ?, ?, ?, ?)';
+
+    let params = [user.id, user.nickname, user.phone, user.password, user.email, user.cid, user.avatar];
+    return new Promise((resolve, reject) => {
+        // console.log(user);
+        db.query(sql_insert, params, function(err, rows) {
+            if (err) {
+                reject(err);
+            } else {
+                if (rows.affectedRows === 1) {
+                    resolve({ code: 200, message: '注册成功' });
+                } else {
+                    resolve({ code: 502, message: '注册失败' })
+                }
+
+            }
+        })
+    })
+}
+
 module.exports = {
-    phoneLogin
+    phoneLogin,
+    register
 }

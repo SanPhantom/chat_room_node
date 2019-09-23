@@ -19,6 +19,15 @@ function query(sql, callback) {
 
 }
 
+function query(sql, param, callback) {
+    pool.getConnection(function(err, conn) {
+        conn.query(sql, param, function(err, rows, fields) {
+            callback(err, rows);
+            conn.release();
+        });
+    })
+}
+
 module.exports = {
     query
 };
