@@ -11,6 +11,8 @@ var multiparty = require('connect-multiparty')
 var multer = require('multer')
 var OSS = require('ali-oss')
 var co = require('co')
+var fs = require('fs')
+var util = require('util')
 
 const client = new OSS({
     accessKeyId: baseData.accessKeyId,
@@ -20,9 +22,9 @@ const client = new OSS({
 })
 
 var storage = multer.diskStorage({
-    destination: function(req, file, callback) {
-        callback(null, "./public/images");
-    },
+    // destination: function(req, file, callback) {
+    //     callback(null, "./public/images");
+    // },
     filename: function(req, file, callback) {
         callback(null, file.originalname);
     }
@@ -68,9 +70,34 @@ router.post('/register', async function(req, res) {
     }
 });
 
-router.post('/upload/img', upload.single('potos'), function(req, res) {
-    console.log(req.body, req.file);
-    res.send(req.file);
+router.post('/upload/img', upload.single('potos'), async function(req, res) {
+    let filePath = req.file.path;
+    let temp = req.file.originalname.split('.');
+    let fileType = temp[temp.length - 1];
+
+    let fileName = uuid().replace(/\-/g, '') + '.' + fileType;
+
+    var localfile = './' + fileName;
+    var key = 'img/' + fileName;
+
+    var readStream = fs.createReadStream(filePath);
+    var writeStream = fs.createWriteStream(localfile);
+
+    readStream.pipe(writeStream);
+
+    readStream.on('end', () => {
+        co(function*() {
+            client.useBucket(baseData.bucket);
+            var result = yield client.put(key, localfile);
+            var imageSrc = 'https://san-chat.oss-cn-shenzhen.aliyuncs.com/' + result.name;
+
+            fs.unlinkSync(localfile);
+            res.send({ code: 200, msg: '上传成功', imageUrl: imageSrc })
+        }).catch((err) => {
+            fs.unlinkSync(localFile);
+            res.send({ code: 101, msg: '上传失败', error: err });
+        })
+    })
 })
 
 module.exports = router;
