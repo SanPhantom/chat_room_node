@@ -1,13 +1,14 @@
-var socket = require('nodejs-websocket');
+var db = require('../utils/mysql')
 
-var server = socket.createServer(function(conn) {
-    conn.on('text', function(str) {
+let insertMessage = () => {
 
-    });
-    conn.on('close', function(code, reason) {
-        console.log('service is closed');
-    });
-    conn.on('error', function(code, reason) {
-        console.log("service is closed for error");
-    });
-}).listen(8001);
+}
+
+let showMessageById = () => {
+
+}
+
+module.exports = {
+    insertMessage,
+    showMessageById
+}
