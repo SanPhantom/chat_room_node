@@ -12,6 +12,7 @@ var TokenJWT = require('./utils/token')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var groupRouter = require('./routes/group');
 
 var app = express();
 expressWs(app);
@@ -64,6 +65,7 @@ app.use(function(req, res, next) {
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/group', groupRouter);
 
 //webSocket 实例
 // new WSRouter(app, http.createServer(app));
