@@ -40,7 +40,8 @@ router.post('/login', async function(req, res) {
     let pwd = req.body.password;
     try {
         let result = await indexService.phoneLogin(req.body.phone, req.body.password);
-        if (result.constructor === Object) {
+        console.log(result.constructor);
+        if (result.id) {
             let jwt = new TokenJWT(result.id.toString());
             let token = jwt.generateToken();
             let res_value = tojson.format(200, result, token);
